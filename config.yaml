@@ -1,0 +1,11 @@
+apiVersion: k3d.io/v1alpha2
+kind: Simple
+name: arm
+servers: 1
+agents: 2
+ports:
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+registries:
+  create: true

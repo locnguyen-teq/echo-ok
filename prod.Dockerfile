@@ -5,7 +5,6 @@ RUN apk add --no-cache ca-certificates \
         git \
         musl-dev \
         openssh
-
 ENV APPDIR /app
 WORKDIR $APPDIR
 COPY go.mod .
@@ -17,6 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -v -installsuffix cgo -o ./arm-echo ./m
 
 
 FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+RUN apk add --no-cache ca-certificates \
+        socat
 COPY --from=builder /app/arm-echo ./
 CMD ["./arm-echo"]

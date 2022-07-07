@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-ok
+  labels:
+    app: echo-ok
+spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        app: echo-ok-pod
+    template:
+      metadata:
+        labels:
+          app: echo-ok-pod
+      spec:
+        containers:
+        - name: echo-ok
+          image: k3d-arm-registry:5000/arm-echo:latest
+          ports:
+          - containerPort: 1323
