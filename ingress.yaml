@@ -8,10 +8,31 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /echo
             pathType: Prefix
             backend:
               service:
                 name: echo-ok-service
                 port:
                   number: 1323
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mysql-ingress
+  labels:
+    name: mysql-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: mysql-service
+                port:
+                  number: 3306
+---
+

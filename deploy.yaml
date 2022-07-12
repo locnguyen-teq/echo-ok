@@ -5,7 +5,7 @@ metadata:
   labels:
     app: echo-ok
 spec:
-    replicas: 2
+    replicas: 1
     selector:
       matchLabels:
         app: echo-ok-pod
@@ -17,5 +17,86 @@ spec:
         containers:
         - name: echo-ok
           image: k3d-arm-registry:5000/arm-echo:latest
+          resources:
+            limits:
+              cpu: 20m
+              memory: 1Gi
           ports:
           - containerPort: 1323
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: arm64v8/mysql:oracle
+        name: mysql
+        resources:
+            limits:
+              cpu: 20m
+              memory: 1Gi
+            requests:
+              cpu: 20m
+              memory: 512Mi
+        env:
+        - name: MYSQL_DATABASE
+          value: db-name
+        - name: MYSQL_USER
+          value: db-user
+        - name: MYSQL_PASSWORD
+          value: db-pass
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

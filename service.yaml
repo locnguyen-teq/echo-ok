@@ -6,8 +6,23 @@ metadata:
   name: echo-ok-service
 spec:
   ports:
-  - port: 1323
-    targetPort: 1323
+  - port: 1323 #sẻ vào port này khi vào port 1323 (port đuôi)
+    targetPort: 1323 #app khac vào port 1323 (port đầu)
   selector:
     app: echo-ok-pod
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+    protocol: TCP
+  selector:
+    app: mysql
   type: ClusterIP
