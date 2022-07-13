@@ -10,7 +10,7 @@ spec:
     targetPort: 1323 #app khac vào port 1323 (port đầu)
   selector:
     app: echo-ok-pod
-  type: ClusterIP
+  type: LoadBalancer
 
 ---
 

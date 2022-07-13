@@ -16,7 +16,7 @@ spec:
       spec:
         containers:
         - name: echo-ok
-          image: k3d-arm-registry:5000/arm-echo:latest
+          image: localhost:5000/arm-echo:latest
           resources:
             limits:
               cpu: 20m
