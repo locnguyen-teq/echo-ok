@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  traefik:
+    image: traefik:v2.8
+    container_name: traefik
+    command: --api.insecure=true --providers.docker=true --providers.docker.exposedByDefault=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    ports:
+      - 9999:80
+      - 443:443
+      - 8080:8080
+    networks:
+      - reverse-proxy
+  whoami:
+    # A container that exposes an API to show its IP address
+    image: traefik/whoami
+    networks:
+      - reverse-proxy
+    deploy:
+      replicas: 2
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)
+      - traefik.enable=true
+
+networks:
+  reverse-proxy:
+    name: reverse-proxy
