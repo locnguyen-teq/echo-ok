@@ -37,7 +37,37 @@ services:
       - traefik.http.routers.echo-arm.rule=Host(`arm.localhost`)
       - traefik.http.services.echo-arm.loadbalancer.server.port=1323
       - traefik.enable=true
+  echo-mysql:
+    # A container that exposes an API to show its IP address
+    image: arm64v8/mysql:oracle
+    environment:
+      MYSQL_DATABASE: data
+      MYSQL_USER: arm
+      MYSQL_PASSWORD: arm
+      MYSQL_ROOT_PASSWORD: arm
+    volumes:
+      - example:/var/lib/mysql
+    command:
+      [
+          "mysqld",
+          "--character-set-server=utf8mb4",
+          "--collation-server=utf8mb4_unicode_ci",
+          "--default-authentication-plugin=mysql_native_password"
+      ]
+    networks:
+      - reverse-proxy
+    deploy:
+      replicas: 1
+    labels:
+      # - traefik.http.routers.echo-mysql.rule=Host(`arm.mysql.localhost`)
+      # - traefik.http.services.echo-mysql.loadbalancer.server.port=3306
+      - traefik.tcp.routers.echo-mysql.rule=HostSNI(`arm.mysql.localhost`)
+      - traefik.tcp.services.echo-mysql.loadbalancer.server.port=3306
+      - traefik.enable=true
   
+volumes:
+  example:
+
 networks:
   reverse-proxy:
     name: reverse-proxy
