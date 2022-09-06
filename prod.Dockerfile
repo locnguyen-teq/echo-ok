@@ -5,6 +5,7 @@ RUN apk add --no-cache ca-certificates \
         git \
         musl-dev \
         openssh
+EXPOSE 1323
 ENV APPDIR /app
 WORKDIR $APPDIR
 COPY go.mod .

@@ -1,0 +1,8 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/teq-macbook/Documents/Lab/vd/echo2'
+docker build --tag k3d-arm-registry.localhost:59873/arm-echo -f prod.Dockerfile .
+docker push k3d-arm-registry.localhost:59873/arm-echo:latest
+docker rmi k3d-arm-registry.localhost:59873/arm-echo
+ 
+make: Leaving directory `/Users/teq-macbook/Documents/Lab/vd/echo2'
+ 

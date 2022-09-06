@@ -1,0 +1,21 @@
+version: "3.4"
+services:
+  echo-go:
+    container_name: echo-go
+    image: golang:1.18-alpine
+    ports:
+      - "1323:1323"
+    volumes:
+      - .:/arm
+      - $GOPATH/pkg/mod:/go/pkg/mod
+    command:
+      [
+        # "ls","/arm"
+        "sh","/arm/start.sh"
+        # "go","mod","tidy&&","go","run","/arm/main.go"
+                #  "sleep","50000"
+      ]
+networks:
+  default:
+    external:
+      name: docker_default

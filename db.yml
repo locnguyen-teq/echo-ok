@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  whoami:
+    # A container that exposes an API to show its IP address
+    image: traefik/whoami
+    networks:
+      - reverse-proxy
+    deploy:
+      replicas: 2
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`whoami.docker2.localhost`)
+      - traefik.enable=true
+
+networks:
+  reverse-proxy:
+    name: reverse-proxy

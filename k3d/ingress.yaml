@@ -34,5 +34,24 @@ spec:
                 name: mysql-service
                 port:
                   number: 3306
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami-ingress
+  labels:
+    name: whoami-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /whoami
+            backend:
+              service:
+                name: whoami-service
+                port:
+                  number: 9999
 ---
 

@@ -1,0 +1,14 @@
+# static configuration
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+
+  [entryPoints.websecure]
+    address = ":443"
+  [entryPoints.websecure.http.tls]
+    certResolver = "myresolver"
+
+[certificatesResolvers.myresolver.acme]
+  email = "your-email@example.com"
+  storage = "acme.json"
+  [certificatesResolvers.myresolver.acme.tlsChallenge]

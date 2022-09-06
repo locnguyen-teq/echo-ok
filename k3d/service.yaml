@@ -26,3 +26,17 @@ spec:
   selector:
     app: mysql
   type: ClusterIP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-service
+spec:
+  ports:
+  - port: 9999
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: whoami-pod
+  type: LoadBalancer
